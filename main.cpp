@@ -77,7 +77,7 @@ public:
         {
             for(int x = 0; x < grid_size; ++x)
             {
-                std::cout << get(x, y) << "\t";
+                std::cout << m_grid[y][x] << "\t";
             }
             std::cout << std::endl;
         }
@@ -180,7 +180,7 @@ public:
     }
 
     // Get the value from x,y
-    int get(const int& x, const int& y) const
+    inline int get(const int& x, const int& y) const
     {
         if(is_outside(x, y))
         {
@@ -191,7 +191,7 @@ public:
     }
 
     // Set the value to x,y
-    void set(const int& x, const int& y, const int value)
+    inline void set(const int& x, const int& y, const int value)
     {
         if(is_outside(x, y))
         {
@@ -209,7 +209,7 @@ public:
         {
             for(int y = 0; y < grid_size; ++y)
             {
-                total += get(x, y);
+                total += m_grid[y][x];
             }
         }
 
@@ -224,7 +224,7 @@ public:
         {
             for(int y = 0; y < grid_size; ++y)
             {
-                int value = get(x, y);
+                int value = m_grid[y][x];
                 if(value > num)
                 {
                     num = value;
@@ -263,7 +263,7 @@ private:
 
                     movement = newY != y;
 
-                    int value = get(x, y);
+                    int value = m_grid[y][x];
 
                     set(x, y, 0);
                     set(x, newY, value);
@@ -291,7 +291,7 @@ private:
 
                     movement = newY != y;
 
-                    int value = get(x, y);
+                    int value = m_grid[y][x];
 
                     set(x, y, 0);
                     set(x, newY, value);
@@ -319,7 +319,7 @@ private:
 
                     movement = newX != x;
 
-                    int value = get(x, y);
+                    int value = m_grid[y][x];
 
                     set(x, y, 0);
                     set(newX, y, value);
@@ -347,7 +347,7 @@ private:
 
                     movement = newX != x;
 
-                    int value = get(x, y);
+                    int value = m_grid[y][x];
 
                     set(x, y, 0);
                     set(newX, y, value);
@@ -375,7 +375,7 @@ private:
                         continue;
                     }
 
-                    int value = get(x, y);
+                    int value = m_grid[y][x];
                     int merge_value = get(x, y + 1);
 
                     if(value == merge_value)
@@ -402,7 +402,7 @@ private:
                         continue;
                     }
 
-                    int value = get(x, y);
+                    int value = m_grid[y][x];
                     int merge_value = get(x, y - 1);
 
                     if(value == merge_value)
@@ -429,7 +429,7 @@ private:
                         continue;
                     }
 
-                    int value = get(x, y);
+                    int value = m_grid[y][x];
                     int merge_value = get(x - 1, y);
 
                     if(value == merge_value)
@@ -456,7 +456,7 @@ private:
                         continue;
                     }
 
-                    int value = get(x, y);
+                    int value = m_grid[y][x];
                     int merge_value = get(x + 1, y);
 
                     if(value == merge_value)
