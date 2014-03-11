@@ -1,3 +1,11 @@
+// A very rough C++ version for the 2048 game
+//
+// Author: Olafur Waage / @olafurw
+// olafurw@gmail.com
+//
+// Under the Apache License
+// If you have any fun with this, please let me know, I would love to hear from you.
+
 #include <iostream>
 #include <random>
 #include <algorithm>
@@ -5,13 +13,11 @@
 
 static const int grid_size = 4;
 
-enum class direction
-{
-    NORTH,
-    SOUTH,
-    EAST,
-    WEST
-};
+// Use int so i can ask for random directions
+static const int NORTH = 0;
+static const int SOUTH = 1;
+static const int EAST = 2;
+static const int WEST = 3;
 
 std::mt19937& rand_gen()
 {
@@ -27,10 +33,11 @@ int rand_pos()
 class grid
 {
 public:
+    // Clear the board and add 2 numbers
     grid()
     {
         reset();
-        init();
+        init(2);
     }
 
     // Sets all values to 0
@@ -45,17 +52,22 @@ public:
         }
     }
 
-    // Sets two values of 2 onto the board
-    void init()
+    // Sets count values of 2 onto the board in an empty slot
+    void init(int count)
     {
-        for(int i = 0; i < 6; ++i)
+        for(int i = 0; i < count; ++i)
         {
-            int x = 0;
-            int y = 0;
+            int x = -1;
+            int y = -1;
 
             random_empty_pos(x, y);
 
-            set(x, y, i + 1);
+            if(x == -1 && y == -1)
+            {
+                return;
+            }
+
+            set(x, y, 2);
         }
     }
 
@@ -65,10 +77,11 @@ public:
         {
             for(int x = 0; x < grid_size; ++x)
             {
-                std::cout << get(x, y) << " ";
+                std::cout << get(x, y) << "\t";
             }
             std::cout << std::endl;
         }
+        std::cout << std::endl;
     }
 
     // Returns true if a space is empty
@@ -77,121 +90,28 @@ public:
         return get(x, y) == 0;
     }
 
+    // Returns true if the value is outside
     inline bool is_outside(const int& x, const int& y) const
     {
         return (x < 0 || x >= grid_size || y < 0 || y >= grid_size);
     }
 
+    // Returns true if the value is on the edge
     inline bool is_edge(const int& x, const int& y) const
     {
         return x == 0 || x == (grid_size - 1) || y == 0 || y == (grid_size - 1);
     }
 
-    void move(direction dir)
+    // An action is a move, merge and then move the merged pieces and then add an new piece
+    void action(int dir)
     {
-        if(dir == direction::SOUTH)
+        bool a = move(dir);
+        bool b = merge(dir);
+        bool c = move(dir);
+
+        if(a || b || c)
         {
-            for(int x = 0; x < grid_size; ++x)
-            {
-                for(int y = grid_size - 1; y >= 0; --y)
-                {
-                    // Empty slots dont move
-                    if(is_empty(x, y))
-                    {
-                        continue;
-                    }
-
-                    int newY = y;
-
-                    while(is_empty(x, newY + 1) && !is_outside(x, newY + 1))
-                    {
-                        newY++;
-                    }
-
-                    int value = get(x, y);
-
-                    set(x, y, 0);
-                    set(x, newY, value);
-                }
-            }
-        }
-        if(dir == direction::NORTH)
-        {
-            for(int x = 0; x < grid_size; ++x)
-            {
-                for(int y = 0; y < grid_size; ++y)
-                {
-                    // Empty slots dont move
-                    if(is_empty(x, y))
-                    {
-                        continue;
-                    }
-
-                    int newY = y;
-
-                    while(is_empty(x, newY - 1) && !is_outside(x, newY - 1))
-                    {
-                        newY--;
-                    }
-
-                    int value = get(x, y);
-
-                    set(x, y, 0);
-                    set(x, newY, value);
-                }
-            }
-        }
-        if(dir == direction::EAST)
-        {
-            for(int x = grid_size - 1; x >= 0; --x)
-            {
-                for(int y = 0; y < grid_size; ++y)
-                {
-                    // Empty slots dont move
-                    if(is_empty(x, y))
-                    {
-                        continue;
-                    }
-
-                    int newX = x;
-
-                    while(is_empty(newX, y) && !is_outside(newX, y))
-                    {
-                        newX--;
-                    }
-
-                    int value = get(x, y);
-
-                    set(x, y, 0);
-                    set(newX, y, value);
-                }
-            }
-        }
-        if(dir == direction::WEST)
-        {
-            for(int x = 0; x < grid_size; ++x)
-            {
-                for(int y = 0; y < grid_size; ++y)
-                {
-                    // Empty slots dont move
-                    if(is_empty(x, y))
-                    {
-                        continue;
-                    }
-
-                    int newX = x;
-
-                    while(is_empty(newX, y) && !is_outside(newX, y))
-                    {
-                        newX++;
-                    }
-
-                    int value = get(x, y);
-
-                    set(x, y, 0);
-                    set(newX, y, value);
-                }
-            }
+            init(1);
         }
     }
 
@@ -242,6 +162,24 @@ public:
         return false;
     }
 
+    // Returns true if there is an empty slots anywhere
+    int has_empty() const
+    {
+        for(int x = 0; x < grid_size; ++x)
+        {
+            for(int y = 0; y < grid_size; ++y)
+            {
+                if(is_empty(x, y))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    // Get the value from x,y
     int get(const int& x, const int& y) const
     {
         if(is_outside(x, y))
@@ -252,6 +190,7 @@ public:
         return m_grid[y][x];
     }
 
+    // Set the value to x,y
     void set(const int& x, const int& y, const int value)
     {
         if(is_outside(x, y))
@@ -262,10 +201,288 @@ public:
         m_grid[y][x] = value;
     }
 
+    // Sum the score
+    int score() const
+    {
+        int total = 0;
+        for(int x = 0; x < grid_size; ++x)
+        {
+            for(int y = 0; y < grid_size; ++y)
+            {
+                total += get(x, y);
+            }
+        }
+
+        return total;
+    }
+
+    // Find the largest
+    int largest() const
+    {
+        int num = 0;
+        for(int x = 0; x < grid_size; ++x)
+        {
+            for(int y = 0; y < grid_size; ++y)
+            {
+                int value = get(x, y);
+                if(value > num)
+                {
+                    num = value;
+                }
+            }
+        }
+
+        return num;
+    }
+
 private:
+    // Moves the tiles in the direction
+    // TODO: Refactor, works for now
+    bool move(int dir)
+    {
+        bool movement = false;
+
+        if(dir == SOUTH)
+        {
+            for(int x = 0; x < grid_size; ++x)
+            {
+                for(int y = grid_size - 1; y >= 0; --y)
+                {
+                    // Empty slots dont move
+                    if(is_empty(x, y))
+                    {
+                        continue;
+                    }
+
+                    int newY = y;
+
+                    while(is_empty(x, newY + 1) && !is_outside(x, newY + 1))
+                    {
+                        newY++;
+                    }
+
+                    movement = newY != y;
+
+                    int value = get(x, y);
+
+                    set(x, y, 0);
+                    set(x, newY, value);
+                }
+            }
+        }
+        if(dir == NORTH)
+        {
+            for(int x = 0; x < grid_size; ++x)
+            {
+                for(int y = 0; y < grid_size; ++y)
+                {
+                    // Empty slots dont move
+                    if(is_empty(x, y))
+                    {
+                        continue;
+                    }
+
+                    int newY = y;
+
+                    while(is_empty(x, newY - 1) && !is_outside(x, newY - 1))
+                    {
+                        newY--;
+                    }
+
+                    movement = newY != y;
+
+                    int value = get(x, y);
+
+                    set(x, y, 0);
+                    set(x, newY, value);
+                }
+            }
+        }
+        if(dir == WEST)
+        {
+            for(int x = 0; x < grid_size; ++x)
+            {
+                for(int y = 0; y < grid_size; ++y)
+                {
+                    // Empty slots dont move
+                    if(is_empty(x, y))
+                    {
+                        continue;
+                    }
+
+                    int newX = x;
+
+                    while(is_empty(newX - 1, y) && !is_outside(newX - 1, y))
+                    {
+                        newX--;
+                    }
+
+                    movement = newX != x;
+
+                    int value = get(x, y);
+
+                    set(x, y, 0);
+                    set(newX, y, value);
+                }
+            }
+        }
+        if(dir == EAST)
+        {
+            for(int x = grid_size - 1; x >= 0; --x)
+            {
+                for(int y = 0; y < grid_size; ++y)
+                {
+                    // Empty slots dont move
+                    if(is_empty(x, y))
+                    {
+                        continue;
+                    }
+
+                    int newX = x;
+
+                    while(is_empty(newX + 1, y) && !is_outside(newX + 1, y))
+                    {
+                        newX++;
+                    }
+
+                    movement = newX != x;
+
+                    int value = get(x, y);
+
+                    set(x, y, 0);
+                    set(newX, y, value);
+                }
+            }
+        }
+
+        return movement;
+    }
+
+    // Goes through and merges in that direction
+    bool merge(int dir)
+    {
+        bool merging = false;
+
+        if(dir == SOUTH)
+        {
+            for(int x = 0; x < grid_size; ++x)
+            {
+                for(int y = grid_size - 1; y >= 0; --y)
+                {
+                    // Empty slots dont merge
+                    if(is_empty(x, y))
+                    {
+                        continue;
+                    }
+
+                    int value = get(x, y);
+                    int merge_value = get(x, y + 1);
+
+                    if(value == merge_value)
+                    {
+                        set(x, y, 0);
+                        set(x, y + 1, value + value);
+
+                        merging = true;
+                    }
+                }
+            }
+
+            return merging;
+        }
+        if(dir == NORTH)
+        {
+            for(int x = 0; x < grid_size; ++x)
+            {
+                for(int y = 0; y < grid_size; ++y)
+                {
+                    // Empty slots dont merge
+                    if(is_empty(x, y))
+                    {
+                        continue;
+                    }
+
+                    int value = get(x, y);
+                    int merge_value = get(x, y - 1);
+
+                    if(value == merge_value)
+                    {
+                        set(x, y, 0);
+                        set(x, y - 1, value + value);
+
+                        merging = true;
+                    }
+                }
+            }
+
+            return merging;
+        }
+        if(dir == WEST)
+        {
+            for(int x = 0; x < grid_size; ++x)
+            {
+                for(int y = 0; y < grid_size; ++y)
+                {
+                    // Empty slots dont merge
+                    if(is_empty(x, y))
+                    {
+                        continue;
+                    }
+
+                    int value = get(x, y);
+                    int merge_value = get(x - 1, y);
+
+                    if(value == merge_value)
+                    {
+                        set(x, y, 0);
+                        set(x - 1, y, value + value);
+
+                        merging = true;
+                    }
+                }
+            }
+
+            return merging;
+        }
+        if(dir == EAST)
+        {
+            for(int x = grid_size - 1; x >= 0; --x)
+            {
+                for(int y = 0; y < grid_size; ++y)
+                {
+                    // Empty slots dont merge
+                    if(is_empty(x, y))
+                    {
+                        continue;
+                    }
+
+                    int value = get(x, y);
+                    int merge_value = get(x + 1, y);
+
+                    if(value == merge_value)
+                    {
+                        set(x, y, 0);
+                        set(x + 1, y, value + value);
+
+                        merging = true;
+                    }
+                }
+            }
+
+            return merging;
+        }
+
+        return merging;
+    }
+
     // Sets the x and y with a random empty position
     void random_empty_pos(int& x, int& y)
     {
+        if(!has_empty())
+        {
+            return;
+        }
+
         do
         {
             x = rand_pos();
@@ -280,33 +497,31 @@ private:
 int main()
 {
     // Init grid
-    grid g;
+    int largest = 0;
 
-    g.print();
+    while(true)
+    {
+        grid g;
 
-    g.move(direction::SOUTH);
+        while(g.can_move())
+        {
+            g.action(rand_pos());
+        }
 
-    std::cout << std::endl;
+        int large = g.largest();
 
-    g.print();
+        if(large > largest)
+        {
+            std::cout << large << std::endl;
+            largest = large;
+        }
 
-    g.move(direction::NORTH);
-
-    std::cout << std::endl;
-
-    g.print();
-
-    g.move(direction::EAST);
-
-    std::cout << std::endl;
-
-    g.print();
-
-    g.move(direction::WEST);
-
-    std::cout << std::endl;
-
-    g.print();
+        if(large >= 2048)
+        {
+            g.print();
+            break;
+        }
+    }
 
     return 0;
 }
