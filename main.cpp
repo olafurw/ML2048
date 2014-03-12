@@ -11,13 +11,13 @@
 #include <algorithm>
 #include <chrono>
 
-static const int grid_size = 4;
+static const short grid_size = 4;
 
 // Use int so i can ask for random directions
-static const int NORTH = 0;
-static const int SOUTH = 1;
-static const int EAST = 2;
-static const int WEST = 3;
+static const short NORTH = 0;
+static const short SOUTH = 1;
+static const short EAST = 2;
+static const short WEST = 3;
 
 std::mt19937& rand_gen()
 {
@@ -25,9 +25,9 @@ std::mt19937& rand_gen()
     return gen;
 }
 
-int rand_pos()
+short rand_pos()
 {
-    return static_cast<int>(rand_gen()() % 4);
+    return static_cast<short>(rand_gen()() % 4);
 }
 
 class grid
@@ -43,22 +43,22 @@ public:
     // Sets all values to 0
     void reset()
     {
-        for(int x = 0; x < grid_size; ++x)
+        for(short x = 0; x < grid_size; ++x)
         {
-            for(int y = 0; y < grid_size; ++y)
+            for(short y = 0; y < grid_size; ++y)
             {
-                set(x, y, 0);
+                m_grid[y][x] = 0;
             }
         }
     }
 
     // Sets count values of 2 onto the board in an empty slot
-    void init(int count)
+    void init(short count)
     {
-        for(int i = 0; i < count; ++i)
+        for(short i = 0; i < count; ++i)
         {
-            int x = -1;
-            int y = -1;
+            short x = -1;
+            short y = -1;
 
             random_empty_pos(x, y);
 
@@ -67,15 +67,15 @@ public:
                 return;
             }
 
-            set(x, y, 2);
+            m_grid[y][x] = 2;
         }
     }
 
     void print()
     {
-        for(int y = 0; y < grid_size; ++y)
+        for(short y = 0; y < grid_size; ++y)
         {
-            for(int x = 0; x < grid_size; ++x)
+            for(short x = 0; x < grid_size; ++x)
             {
                 std::cout << m_grid[y][x] << "\t";
             }
@@ -84,22 +84,10 @@ public:
         std::cout << std::endl;
     }
 
-    // Returns true if a space is empty
-    inline bool is_empty(const int& x, const int& y) const
-    {
-        return get(x, y) == 0;
-    }
-
     // Returns true if the value is outside
-    inline bool is_outside(const int& x, const int& y) const
+    inline bool is_outside(const short& x, const short& y) const
     {
         return (x < 0 || x >= grid_size || y < 0 || y >= grid_size);
-    }
-
-    // Returns true if the value is on the edge
-    inline bool is_edge(const int& x, const int& y) const
-    {
-        return x == 0 || x == (grid_size - 1) || y == 0 || y == (grid_size - 1);
     }
 
     // An action is a move, merge and then move the merged pieces and then add an new piece
@@ -118,38 +106,38 @@ public:
     // Returns true if there is an available move
     bool can_move() const
     {
-        for(int x = 0; x < grid_size; ++x)
+        for(short x = 0; x < grid_size; ++x)
         {
-            for(int y = 0; y < grid_size; ++y)
+            for(short y = 0; y < grid_size; ++y)
             {
                 // Only need 1 empty space to move
-                if(is_empty(x, y))
+                if(m_grid[y][x] == 0)
                 {
                     return true;
                 }
 
                 // Neighbor check
-                int value = get(x, y);
+                short value = m_grid[y][x];
 
-                int north = get(x, y - 1);
+                short north = get(x, y - 1);
                 if(value == north)
                 {
                     return true;
                 }
 
-                int south = get(x, y + 1);
+                short south = get(x, y + 1);
                 if(value == south)
                 {
                     return true;
                 }
 
-                int east = get(x - 1, y);
+                short east = get(x - 1, y);
                 if(value == east)
                 {
                     return true;
                 }
 
-                int west = get(x + 1, y);
+                short west = get(x + 1, y);
                 if(value == west)
                 {
                     return true;
@@ -165,11 +153,11 @@ public:
     // Returns true if there is an empty slots anywhere
     int has_empty() const
     {
-        for(int x = 0; x < grid_size; ++x)
+        for(short x = 0; x < grid_size; ++x)
         {
-            for(int y = 0; y < grid_size; ++y)
+            for(short y = 0; y < grid_size; ++y)
             {
-                if(is_empty(x, y))
+                if(m_grid[y][x] == 0)
                 {
                     return true;
                 }
@@ -180,7 +168,7 @@ public:
     }
 
     // Get the value from x,y
-    inline int get(const int& x, const int& y) const
+    inline short get(const short& x, const short& y) const
     {
         if(is_outside(x, y))
         {
@@ -190,24 +178,13 @@ public:
         return m_grid[y][x];
     }
 
-    // Set the value to x,y
-    inline void set(const int& x, const int& y, const int value)
-    {
-        if(is_outside(x, y))
-        {
-            return;
-        }
-
-        m_grid[y][x] = value;
-    }
-
     // Sum the score
-    int score() const
+    short score() const
     {
         int total = 0;
-        for(int x = 0; x < grid_size; ++x)
+        for(short x = 0; x < grid_size; ++x)
         {
-            for(int y = 0; y < grid_size; ++y)
+            for(short y = 0; y < grid_size; ++y)
             {
                 total += m_grid[y][x];
             }
@@ -217,14 +194,14 @@ public:
     }
 
     // Find the largest
-    int largest() const
+    short largest() const
     {
-        int num = 0;
-        for(int x = 0; x < grid_size; ++x)
+        short num = 0;
+        for(short x = 0; x < grid_size; ++x)
         {
-            for(int y = 0; y < grid_size; ++y)
+            for(short y = 0; y < grid_size; ++y)
             {
-                int value = m_grid[y][x];
+                short value = m_grid[y][x];
                 if(value > num)
                 {
                     num = value;
@@ -238,119 +215,119 @@ public:
 private:
     // Moves the tiles in the direction
     // TODO: Refactor, works for now
-    bool move(int dir)
+    bool move(short dir)
     {
         bool movement = false;
 
         if(dir == SOUTH)
         {
-            for(int x = 0; x < grid_size; ++x)
+            for(short x = 0; x < grid_size; ++x)
             {
-                for(int y = grid_size - 1; y >= 0; --y)
+                for(short y = grid_size - 1; y >= 0; --y)
                 {
                     // Empty slots dont move
-                    if(is_empty(x, y))
+                    if(m_grid[y][x] == 0)
                     {
                         continue;
                     }
 
-                    int newY = y;
+                    short newY = y;
 
-                    while(is_empty(x, newY + 1) && !is_outside(x, newY + 1))
+                    while(m_grid[newY + 1][x] == 0 && !is_outside(x, newY + 1))
                     {
                         newY++;
                     }
 
                     movement = newY != y;
 
-                    int value = m_grid[y][x];
+                    short value = m_grid[y][x];
 
-                    set(x, y, 0);
-                    set(x, newY, value);
+                    m_grid[y][x] = 0;
+                    m_grid[newY][x] = value;
                 }
             }
         }
         if(dir == NORTH)
         {
-            for(int x = 0; x < grid_size; ++x)
+            for(short x = 0; x < grid_size; ++x)
             {
-                for(int y = 0; y < grid_size; ++y)
+                for(short y = 0; y < grid_size; ++y)
                 {
                     // Empty slots dont move
-                    if(is_empty(x, y))
+                    if(m_grid[y][x] == 0)
                     {
                         continue;
                     }
 
-                    int newY = y;
+                    short newY = y;
 
-                    while(is_empty(x, newY - 1) && !is_outside(x, newY - 1))
+                    while(m_grid[newY - 1][x] == 0 && !is_outside(x, newY - 1))
                     {
                         newY--;
                     }
 
                     movement = newY != y;
 
-                    int value = m_grid[y][x];
+                    short value = m_grid[y][x];
 
-                    set(x, y, 0);
-                    set(x, newY, value);
+                    m_grid[y][x] = 0;
+                    m_grid[newY][x] = value;
                 }
             }
         }
         if(dir == WEST)
         {
-            for(int x = 0; x < grid_size; ++x)
+            for(short x = 0; x < grid_size; ++x)
             {
-                for(int y = 0; y < grid_size; ++y)
+                for(short y = 0; y < grid_size; ++y)
                 {
                     // Empty slots dont move
-                    if(is_empty(x, y))
+                    if(m_grid[y][x] == 0)
                     {
                         continue;
                     }
 
-                    int newX = x;
+                    short newX = x;
 
-                    while(is_empty(newX - 1, y) && !is_outside(newX - 1, y))
+                    while(m_grid[y][newX - 1] == 0 && !is_outside(newX - 1, y))
                     {
                         newX--;
                     }
 
                     movement = newX != x;
 
-                    int value = m_grid[y][x];
+                    short value = m_grid[y][x];
 
-                    set(x, y, 0);
-                    set(newX, y, value);
+                    m_grid[y][x] = 0;
+                    m_grid[y][newX] = value;
                 }
             }
         }
         if(dir == EAST)
         {
-            for(int x = grid_size - 1; x >= 0; --x)
+            for(short x = grid_size - 1; x >= 0; --x)
             {
-                for(int y = 0; y < grid_size; ++y)
+                for(short y = 0; y < grid_size; ++y)
                 {
                     // Empty slots dont move
-                    if(is_empty(x, y))
+                    if(m_grid[y][x] == 0)
                     {
                         continue;
                     }
 
-                    int newX = x;
+                    short newX = x;
 
-                    while(is_empty(newX + 1, y) && !is_outside(newX + 1, y))
+                    while(m_grid[y][newX + 1] == 0 && !is_outside(newX + 1, y))
                     {
                         newX++;
                     }
 
                     movement = newX != x;
 
-                    int value = m_grid[y][x];
+                    short value = m_grid[y][x];
 
-                    set(x, y, 0);
-                    set(newX, y, value);
+                    m_grid[y][x] = 0;
+                    m_grid[y][newX] = value;
                 }
             }
         }
@@ -359,29 +336,29 @@ private:
     }
 
     // Goes through and merges in that direction
-    bool merge(int dir)
+    bool merge(short dir)
     {
         bool merging = false;
 
         if(dir == SOUTH)
         {
-            for(int x = 0; x < grid_size; ++x)
+            for(short x = 0; x < grid_size; ++x)
             {
-                for(int y = grid_size - 1; y >= 0; --y)
+                for(short y = grid_size - 1; y >= 0; --y)
                 {
                     // Empty slots dont merge
-                    if(is_empty(x, y))
+                    if(m_grid[y][x] == 0)
                     {
                         continue;
                     }
 
-                    int value = m_grid[y][x];
-                    int merge_value = get(x, y + 1);
+                    short value = m_grid[y][x];
+                    short merge_value = get(x, y + 1);
 
                     if(value == merge_value)
                     {
-                        set(x, y, 0);
-                        set(x, y + 1, value + value);
+                        m_grid[y][x] = 0;
+                        m_grid[y + 1][x] = value + value;
 
                         merging = true;
                     }
@@ -392,23 +369,23 @@ private:
         }
         if(dir == NORTH)
         {
-            for(int x = 0; x < grid_size; ++x)
+            for(short x = 0; x < grid_size; ++x)
             {
-                for(int y = 0; y < grid_size; ++y)
+                for(short y = 0; y < grid_size; ++y)
                 {
                     // Empty slots dont merge
-                    if(is_empty(x, y))
+                    if(m_grid[y][x] == 0)
                     {
                         continue;
                     }
 
-                    int value = m_grid[y][x];
-                    int merge_value = get(x, y - 1);
+                    short value = m_grid[y][x];
+                    short merge_value = get(x, y - 1);
 
                     if(value == merge_value)
                     {
-                        set(x, y, 0);
-                        set(x, y - 1, value + value);
+                        m_grid[y][x] = 0;
+                        m_grid[y - 1][x] = value + value;
 
                         merging = true;
                     }
@@ -419,23 +396,23 @@ private:
         }
         if(dir == WEST)
         {
-            for(int x = 0; x < grid_size; ++x)
+            for(short x = 0; x < grid_size; ++x)
             {
-                for(int y = 0; y < grid_size; ++y)
+                for(short y = 0; y < grid_size; ++y)
                 {
                     // Empty slots dont merge
-                    if(is_empty(x, y))
+                    if(m_grid[y][x] == 0)
                     {
                         continue;
                     }
 
-                    int value = m_grid[y][x];
-                    int merge_value = get(x - 1, y);
+                    short value = m_grid[y][x];
+                    short merge_value = get(x - 1, y);
 
                     if(value == merge_value)
                     {
-                        set(x, y, 0);
-                        set(x - 1, y, value + value);
+                        m_grid[y][x] = 0;
+                        m_grid[y][x - 1] = value + value;
 
                         merging = true;
                     }
@@ -446,23 +423,23 @@ private:
         }
         if(dir == EAST)
         {
-            for(int x = grid_size - 1; x >= 0; --x)
+            for(short x = grid_size - 1; x >= 0; --x)
             {
-                for(int y = 0; y < grid_size; ++y)
+                for(short y = 0; y < grid_size; ++y)
                 {
                     // Empty slots dont merge
-                    if(is_empty(x, y))
+                    if(m_grid[y][x] == 0)
                     {
                         continue;
                     }
 
-                    int value = m_grid[y][x];
-                    int merge_value = get(x + 1, y);
+                    short value = m_grid[y][x];
+                    short merge_value = get(x + 1, y);
 
                     if(value == merge_value)
                     {
-                        set(x, y, 0);
-                        set(x + 1, y, value + value);
+                        m_grid[y][x] = 0;
+                        m_grid[y][x + 1] = value + value;
 
                         merging = true;
                     }
@@ -476,7 +453,7 @@ private:
     }
 
     // Sets the x and y with a random empty position
-    void random_empty_pos(int& x, int& y)
+    void random_empty_pos(short& x, short& y)
     {
         if(!has_empty())
         {
@@ -488,18 +465,20 @@ private:
             x = rand_pos();
             y = rand_pos();
         }
-        while(!is_empty(x, y));
+        while(!m_grid[y][x] == 0);
     }
 
-    int m_grid[grid_size][grid_size];
+    short m_grid[grid_size][grid_size];
 };
 
 int main()
 {
-    // Init grid
-    int largest = 0;
+    auto start = std::chrono::system_clock::now().time_since_epoch().count();
 
-    while(true)
+    // Init grid
+    short largest = 0;
+
+    while((std::chrono::system_clock::now().time_since_epoch().count() - start) / 1000000000.0f < 5.0f)
     {
         grid g;
 
@@ -508,7 +487,7 @@ int main()
             g.action(rand_pos());
         }
 
-        int large = g.largest();
+        short large = g.largest();
 
         if(large > largest)
         {
@@ -522,6 +501,6 @@ int main()
             break;
         }
     }
-
+    
     return 0;
 }
