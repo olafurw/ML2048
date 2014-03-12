@@ -235,7 +235,7 @@ private:
 
                     while(m_grid[newY + 1][x] == 0 && !is_outside(x, newY + 1))
                     {
-                        newY++;
+                        ++newY;
                     }
 
                     movement = newY != y;
@@ -263,7 +263,7 @@ private:
 
                     while(m_grid[newY - 1][x] == 0 && !is_outside(x, newY - 1))
                     {
-                        newY--;
+                        --newY;
                     }
 
                     movement = newY != y;
@@ -291,7 +291,7 @@ private:
 
                     while(m_grid[y][newX - 1] == 0 && !is_outside(newX - 1, y))
                     {
-                        newX--;
+                        --newX;
                     }
 
                     movement = newX != x;
@@ -319,7 +319,7 @@ private:
 
                     while(m_grid[y][newX + 1] == 0 && !is_outside(newX + 1, y))
                     {
-                        newX++;
+                        ++newX;
                     }
 
                     movement = newX != x;
