@@ -13,7 +13,7 @@
 
 static const short grid_size = 4;
 
-// Use int so i can ask for random directions
+// Use short so i can ask for random directions
 static const short NORTH = 0;
 static const short SOUTH = 1;
 static const short EAST = 2;
@@ -91,7 +91,7 @@ public:
     }
 
     // An action is a move, merge and then move the merged pieces and then add an new piece
-    void action(int dir)
+    void action(short dir)
     {
         bool a = move(dir);
         bool b = merge(dir);
@@ -179,7 +179,7 @@ public:
     }
 
     // Sum the score
-    short score() const
+    int score() const
     {
         int total = 0;
         for(short x = 0; x < grid_size; ++x)
@@ -232,10 +232,13 @@ private:
                     }
 
                     short newY = y;
+                    short nextY = y + 1;
 
-                    while(m_grid[newY + 1][x] == 0 && !is_outside(x, newY + 1))
+                    while(m_grid[nextY][x] == 0 && !is_outside(x, nextY))
                     {
-                        ++newY;
+                        newY = nextY;
+
+                        ++nextY;
                     }
 
                     movement = newY != y;
@@ -260,10 +263,13 @@ private:
                     }
 
                     short newY = y;
+                    short nextY = y - 1;
 
-                    while(m_grid[newY - 1][x] == 0 && !is_outside(x, newY - 1))
+                    while(m_grid[nextY][x] == 0 && !is_outside(x, nextY))
                     {
-                        --newY;
+                        newY = nextY;
+
+                        --nextY;
                     }
 
                     movement = newY != y;
@@ -288,10 +294,13 @@ private:
                     }
 
                     short newX = x;
+                    short nextX = x - 1;
 
-                    while(m_grid[y][newX - 1] == 0 && !is_outside(newX - 1, y))
+                    while(m_grid[y][nextX] == 0 && !is_outside(nextX, y))
                     {
-                        --newX;
+                        newX = nextX;
+
+                        --nextX;
                     }
 
                     movement = newX != x;
@@ -316,10 +325,13 @@ private:
                     }
 
                     short newX = x;
+                    short nextX = x + 1;
 
-                    while(m_grid[y][newX + 1] == 0 && !is_outside(newX + 1, y))
+                    while(m_grid[y][nextX] == 0 && !is_outside(nextX, y))
                     {
-                        ++newX;
+                        newX = nextX;
+
+                        ++nextX;
                     }
 
                     movement = newX != x;
@@ -352,13 +364,14 @@ private:
                         continue;
                     }
 
+                    short nextY = y + 1;
                     short value = m_grid[y][x];
-                    short merge_value = get(x, y + 1);
+                    short merge_value = get(x, nextY);
 
                     if(value == merge_value)
                     {
                         m_grid[y][x] = 0;
-                        m_grid[y + 1][x] = value + value;
+                        m_grid[nextY][x] = value + value;
 
                         merging = true;
                     }
@@ -379,13 +392,14 @@ private:
                         continue;
                     }
 
+                    short nextY = y - 1;
                     short value = m_grid[y][x];
-                    short merge_value = get(x, y - 1);
+                    short merge_value = get(x, nextY);
 
                     if(value == merge_value)
                     {
                         m_grid[y][x] = 0;
-                        m_grid[y - 1][x] = value + value;
+                        m_grid[nextY][x] = value + value;
 
                         merging = true;
                     }
@@ -406,13 +420,14 @@ private:
                         continue;
                     }
 
+                    short nextX = x - 1;
                     short value = m_grid[y][x];
-                    short merge_value = get(x - 1, y);
+                    short merge_value = get(nextX, y);
 
                     if(value == merge_value)
                     {
                         m_grid[y][x] = 0;
-                        m_grid[y][x - 1] = value + value;
+                        m_grid[y][nextX] = value + value;
 
                         merging = true;
                     }
@@ -433,13 +448,14 @@ private:
                         continue;
                     }
 
+                    short nextX = x + 1;
                     short value = m_grid[y][x];
-                    short merge_value = get(x + 1, y);
+                    short merge_value = get(nextX, y);
 
                     if(value == merge_value)
                     {
                         m_grid[y][x] = 0;
-                        m_grid[y][x + 1] = value + value;
+                        m_grid[y][nextX] = value + value;
 
                         merging = true;
                     }
@@ -478,7 +494,7 @@ int main()
     // Init grid
     short largest = 0;
 
-    while((std::chrono::system_clock::now().time_since_epoch().count() - start) / 1000000000.0f < 5.0f)
+    while((std::chrono::system_clock::now().time_since_epoch().count() - start) / 1000000000.0f < 20.0f)
     {
         grid g;
 
