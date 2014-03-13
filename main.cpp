@@ -12,6 +12,9 @@
 #include <chrono>
 
 static const short grid_size = 4;
+static const short initial_value = 2;
+static const short initial_slot_count = 2;
+static const short round_slot_count = 1;
 
 // Use short so i can ask for random directions
 static const short NORTH = 0;
@@ -27,7 +30,7 @@ std::mt19937& rand_gen()
 
 short rand_pos()
 {
-    return static_cast<short>(rand_gen()() % 4);
+    return static_cast<short>(rand_gen()() % grid_size);
 }
 
 class grid
@@ -37,7 +40,7 @@ public:
     grid()
     {
         reset();
-        init(2);
+        init(initial_slot_count);
     }
 
     // Sets all values to 0
@@ -67,7 +70,7 @@ public:
                 return;
             }
 
-            m_grid[y][x] = 2;
+            m_grid[y][x] = initial_value;
         }
     }
 
@@ -99,7 +102,7 @@ public:
 
         if(a || b || c)
         {
-            init(1);
+            init(round_slot_count);
         }
     }
 
@@ -493,6 +496,7 @@ int main()
 
     // Init grid
     short largest = 0;
+    unsigned int game_count = 0;
 
     while((std::chrono::system_clock::now().time_since_epoch().count() - start) / 1000000000.0f < 20.0f)
     {
@@ -502,6 +506,8 @@ int main()
         {
             g.action(rand_pos());
         }
+        
+        ++game_count;
 
         short large = g.largest();
 
@@ -517,6 +523,8 @@ int main()
             break;
         }
     }
+
+    std::cout << game_count << std::endl;
     
     return 0;
 }
