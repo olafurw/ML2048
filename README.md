@@ -1,8 +1,10 @@
 ML2048
 ======
 
-A very rough early stage C++ console version of the 2048 game.
+This project impliments a C++ console version of the game 2048.
+
+It also contains a Genetic Algorithm structure to try to solve the game.
+
+If you want to try some methods yourself, please check it out, the class "grid" has all the interfaces for you to use to play the game. See the main file for usage.
 
 Author: Olafur Waage / @olafurw / olafurw@gmail.com
-
-Going to add Genetic search or Reinforcement learning soon.
