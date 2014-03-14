@@ -42,9 +42,9 @@ void grid::init(int count)
 }
 
 // Applies the actions to the grid
-void grid::add_actions(std::vector<int>& actions)
+void grid::add_actions(std::vector<direction>& actions)
 {
-    for(int a : actions)
+    for(direction a : actions)
     {
         action(a);
     }
@@ -70,7 +70,7 @@ inline bool grid::is_outside(const int& x, const int& y) const
 }
 
 // An action is a move, merge and then move the merged pieces and then add an new piece
-void grid::action(int dir)
+void grid::action(direction dir)
 {
     bool a = move(dir);
     bool b = merge(dir);
@@ -193,18 +193,18 @@ int grid::largest() const
     return num;
 }
 
-std::vector<int> grid::actions() const
+std::vector<direction> grid::actions() const
 {
     return m_actions;
 }
 
 // Moves the tiles in the direction
 // TODO: Refactor, works for now
-bool grid::move(int dir)
+bool grid::move(direction dir)
 {
     bool movement = false;
 
-    if(dir == SOUTH)
+    if(dir == direction::SOUTH)
     {
         for(int x = 0; x < grid_size; ++x)
         {
@@ -238,7 +238,7 @@ bool grid::move(int dir)
             }
         }
     }
-    if(dir == NORTH)
+    if(dir == direction::NORTH)
     {
         for(int x = 0; x < grid_size; ++x)
         {
@@ -272,7 +272,7 @@ bool grid::move(int dir)
             }
         }
     }
-    if(dir == WEST)
+    if(dir == direction::WEST)
     {
         for(int x = 0; x < grid_size; ++x)
         {
@@ -306,7 +306,7 @@ bool grid::move(int dir)
             }
         }
     }
-    if(dir == EAST)
+    if(dir == direction::EAST)
     {
         for(int x = grid_size - 1; x >= 0; --x)
         {
@@ -345,11 +345,11 @@ bool grid::move(int dir)
 }
 
 // Goes through and merges in that direction
-bool grid::merge(int dir)
+bool grid::merge(direction dir)
 {
     bool merging = false;
 
-    if(dir == SOUTH)
+    if(dir == direction::SOUTH)
     {
         for(int x = 0; x < grid_size; ++x)
         {
@@ -377,7 +377,7 @@ bool grid::merge(int dir)
 
         return merging;
     }
-    if(dir == NORTH)
+    if(dir == direction::NORTH)
     {
         for(int x = 0; x < grid_size; ++x)
         {
@@ -405,7 +405,7 @@ bool grid::merge(int dir)
 
         return merging;
     }
-    if(dir == WEST)
+    if(dir == direction::WEST)
     {
         for(int x = 0; x < grid_size; ++x)
         {
@@ -433,7 +433,7 @@ bool grid::merge(int dir)
 
         return merging;
     }
-    if(dir == EAST)
+    if(dir == direction::EAST)
     {
         for(int x = grid_size - 1; x >= 0; --x)
         {

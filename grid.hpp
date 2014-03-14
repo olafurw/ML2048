@@ -22,7 +22,7 @@ public:
     void reset();
 
     // Applies the actions to the grid
-    void add_actions(std::vector<int>& actions);
+    void add_actions(std::vector<direction>& actions);
 
     void print();
 
@@ -30,7 +30,7 @@ public:
     inline bool is_outside(const int& x, const int& y) const;
 
     // An action is a move, merge and then move the merged pieces and then add an new piece
-    void action(int dir);
+    void action(direction dir);
 
     // Returns true if there is an available move
     bool can_move() const;
@@ -47,7 +47,7 @@ public:
     // Find the largest
     int largest() const;
 
-    std::vector<int> actions() const;
+    std::vector<direction> actions() const;
 
 private:
     // Sets count values of 2 onto the board in an empty slot
@@ -55,17 +55,17 @@ private:
 
     // Moves the tiles in the direction
     // TODO: Refactor, works for now
-    bool move(int dir);
+    bool move(direction dir);
 
     // Goes through and merges in that direction
-    bool merge(int dir);
+    bool merge(direction dir);
 
     // Sets the x and y with a random empty position
     void random_empty_pos(int& x, int& y);
 
     int m_grid[grid_size][grid_size];
 
-    std::vector<int> m_actions;
+    std::vector<direction> m_actions;
 };
 
 #endif

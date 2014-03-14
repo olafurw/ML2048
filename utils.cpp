@@ -13,7 +13,7 @@ int rand_pos()
     return static_cast<int>(rand_gen()() % grid_size);
 }
 
-int rand_action()
+direction rand_action()
 {
-    return static_cast<int>(rand_gen()() % action_count);
+    return static_cast<direction>(rand_gen()() % action_count);
 }

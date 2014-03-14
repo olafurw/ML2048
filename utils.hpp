@@ -17,10 +17,14 @@ static const int initial_slot_count = 2;
 static const int round_slot_count = 1;
 
 // Fixed values, probably shouldn't change.
-static const int NORTH = 0;
-static const int SOUTH = 1;
-static const int EAST = 2;
-static const int WEST = 3;
+enum class direction
+{
+    NORTH = 0,
+    SOUTH,
+    EAST,
+    WEST
+};
+
 static const int action_count = 4;
 
 // Mersenne twister random generator
@@ -30,6 +34,6 @@ std::mt19937& rand_gen();
 int rand_pos();
 
 // Gives a random action from [0, action_count)
-int rand_action();
+direction rand_action();
 
 #endif
