@@ -27,7 +27,7 @@ public:
     void print();
 
     // Returns true if the value is outside
-    inline bool is_outside(const int& x, const int& y) const;
+    inline bool is_outside(const int x, const int y) const;
 
     // An action is a move, merge and then move the merged pieces and then add an new piece
     void action(direction dir);

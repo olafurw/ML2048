@@ -64,7 +64,7 @@ void grid::print()
 }
 
 // Returns true if the value is outside
-inline bool grid::is_outside(const int& x, const int& y) const
+inline bool grid::is_outside(const int x, const int y) const
 {
     return (x < 0 || x >= grid_size || y < 0 || y >= grid_size);
 }
