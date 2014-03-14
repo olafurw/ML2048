@@ -2,8 +2,9 @@
 #define __2048_UTILS__
 
 #include <random>
+#include <algorithm>
 
-static const short grid_size = 2;
+static const short grid_size = 4;
 static const short initial_value = 2;
 static const short initial_slot_count = 2;
 static const short round_slot_count = 1;

@@ -41,6 +41,15 @@ void grid::init(short count)
     }
 }
 
+// Applies the actions to the grid
+void grid::add_actions(std::vector<short>& actions)
+{
+    for(short a : actions)
+    {
+        action(a);
+    }
+}
+
 void grid::print()
 {
     for(short y = 0; y < grid_size; ++y)

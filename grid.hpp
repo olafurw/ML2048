@@ -24,6 +24,9 @@ public:
     // Sets count values of 2 onto the board in an empty slot
     void init(short count);
 
+    // Applies the actions to the grid
+    void add_actions(std::vector<short>& actions);
+
     void print();
 
     // Returns true if the value is outside
