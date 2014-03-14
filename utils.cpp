@@ -12,3 +12,8 @@ short rand_pos()
 {
     return static_cast<short>(rand_gen()() % grid_size);
 }
+
+short rand_action()
+{
+    return static_cast<short>(rand_gen()() % action_count);
+}

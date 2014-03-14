@@ -15,15 +15,18 @@ int main()
 {
     grid g;
 
-    g.print();
-
     while(g.can_move())
     {
-        g.action(rand_pos());
-        g.print();
+        g.action(rand_action());
     }
-    
-    std::cout << g.can_move() << std::endl;
+
+    for(auto& action : g.actions())
+    {
+        std::cout << action << std::endl;
+    }
+
+    g.print();
+    std::cout << g.score() << std::endl;
 
     return 0;
 }
