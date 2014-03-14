@@ -193,6 +193,11 @@ int grid::largest() const
     return num;
 }
 
+int grid::size()
+{
+    return grid_size;
+}
+
 std::vector<direction> grid::actions() const
 {
     return m_actions;

@@ -26,9 +26,6 @@ public:
 
     void print();
 
-    // Returns true if the value is outside
-    inline bool is_outside(const int x, const int y) const;
-
     // An action is a move, merge and then move the merged pieces and then add an new piece
     void action(direction dir);
 
@@ -47,7 +44,11 @@ public:
     // Find the largest
     int largest() const;
 
+    // Returns the actions the grid has performed
     std::vector<direction> actions() const;
+
+    // Returns the size of the grid
+    static int size();
 
 private:
     // Sets count values of 2 onto the board in an empty slot
@@ -59,6 +60,9 @@ private:
 
     // Goes through and merges in that direction
     bool merge(direction dir);
+    
+    // Returns true if the value is outside
+    inline bool is_outside(const int x, const int y) const;
 
     // Sets the x and y with a random empty position
     void random_empty_pos(int& x, int& y);
