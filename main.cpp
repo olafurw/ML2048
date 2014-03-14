@@ -13,12 +13,12 @@
 
 unsigned int tournament_selection(const std::vector<grid>& population)
 {
-    std::mt19937& r = rand_gen();
+    std::uniform_int_distribution<> dis(0, population.size() - 1);
 
-    unsigned int parent_a = r() % population.size();
+    unsigned int parent_a = dis(rand_gen());
     int parent_a_score = population[parent_a].score();
 
-    unsigned int parent_b = r() % population.size();
+    unsigned int parent_b = dis(rand_gen());
     int parent_b_score = population[parent_b].score();
 
     return parent_a_score > parent_b_score ? parent_a : parent_b;
@@ -26,11 +26,11 @@ unsigned int tournament_selection(const std::vector<grid>& population)
 
 void mutation(std::vector<direction>& child_a_actions)
 {
-    std::mt19937& r = rand_gen();
+    std::uniform_int_distribution<> dis(0, 99);
 
     for(unsigned int i = 0; i < child_a_actions.size(); ++i)
     {
-        if(r() % 100 < 10)
+        if(dis(rand_gen()) < 10)
         {
             child_a_actions[i] = rand_action();
         }
@@ -42,12 +42,12 @@ void one_point_crossover(const std::vector<direction>& parent_a,
                          grid& child_a,
                          grid& child_b)
 {
-    std::mt19937& r = rand_gen();
+    std::uniform_int_distribution<> dis(0, parent_a.size());
 
     std::vector<direction> child_a_actions;
     std::vector<direction> child_b_actions;
 
-    unsigned int split_a = static_cast<unsigned int>(r() % parent_a.size());
+    unsigned int split_a = dis(rand_gen());
     unsigned int smaller_parent = std::min(parent_a.size(), parent_b.size());
     unsigned int larger_parent = std::max(parent_a.size(), parent_b.size());
     unsigned int split = std::min(split_a, smaller_parent);
