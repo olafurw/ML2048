@@ -24,7 +24,7 @@ unsigned int tournament_selection(const std::vector<grid>& population)
     return parent_a_score > parent_b_score ? parent_a : parent_b;
 }
 
-void mutation(std::vector<short>& child_a_actions)
+void mutation(std::vector<int>& child_a_actions)
 {
     std::mt19937& r = rand_gen();
 
@@ -37,15 +37,15 @@ void mutation(std::vector<short>& child_a_actions)
     }
 }
 
-void one_point_crossover(const std::vector<short>& parent_a,
-                         const std::vector<short>& parent_b,
+void one_point_crossover(const std::vector<int>& parent_a,
+                         const std::vector<int>& parent_b,
                          grid& child_a,
                          grid& child_b)
 {
     std::mt19937& r = rand_gen();
 
-    std::vector<short> child_a_actions;
-    std::vector<short> child_b_actions;
+    std::vector<int> child_a_actions;
+    std::vector<int> child_b_actions;
 
     unsigned int split_a = static_cast<unsigned int>(r() % parent_a.size());
     unsigned int smaller_parent = std::min(parent_a.size(), parent_b.size());

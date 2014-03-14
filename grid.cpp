@@ -13,9 +13,9 @@ grid::grid()
 // Sets all values to 0
 void grid::reset()
 {
-    for(short x = 0; x < grid_size; ++x)
+    for(int x = 0; x < grid_size; ++x)
     {
-        for(short y = 0; y < grid_size; ++y)
+        for(int y = 0; y < grid_size; ++y)
         {
             m_grid[y][x] = 0;
         }
@@ -23,12 +23,12 @@ void grid::reset()
 }
 
 // Sets count values of 2 onto the board in an empty slot
-void grid::init(short count)
+void grid::init(int count)
 {
-    for(short i = 0; i < count; ++i)
+    for(int i = 0; i < count; ++i)
     {
-        short x = -1;
-        short y = -1;
+        int x = -1;
+        int y = -1;
 
         random_empty_pos(x, y);
 
@@ -42,9 +42,9 @@ void grid::init(short count)
 }
 
 // Applies the actions to the grid
-void grid::add_actions(std::vector<short>& actions)
+void grid::add_actions(std::vector<int>& actions)
 {
-    for(short a : actions)
+    for(int a : actions)
     {
         action(a);
     }
@@ -52,9 +52,9 @@ void grid::add_actions(std::vector<short>& actions)
 
 void grid::print()
 {
-    for(short y = 0; y < grid_size; ++y)
+    for(int y = 0; y < grid_size; ++y)
     {
-        for(short x = 0; x < grid_size; ++x)
+        for(int x = 0; x < grid_size; ++x)
         {
             std::cout << m_grid[y][x] << "\t";
         }
@@ -64,13 +64,13 @@ void grid::print()
 }
 
 // Returns true if the value is outside
-inline bool grid::is_outside(const short& x, const short& y) const
+inline bool grid::is_outside(const int& x, const int& y) const
 {
     return (x < 0 || x >= grid_size || y < 0 || y >= grid_size);
 }
 
 // An action is a move, merge and then move the merged pieces and then add an new piece
-void grid::action(short dir)
+void grid::action(int dir)
 {
     bool a = move(dir);
     bool b = merge(dir);
@@ -87,9 +87,9 @@ void grid::action(short dir)
 // Returns true if there is an available move
 bool grid::can_move() const
 {
-    for(short x = 0; x < grid_size; ++x)
+    for(int x = 0; x < grid_size; ++x)
     {
-        for(short y = 0; y < grid_size; ++y)
+        for(int y = 0; y < grid_size; ++y)
         {
             // Only need 1 empty space to move
             if(m_grid[y][x] == 0)
@@ -98,27 +98,27 @@ bool grid::can_move() const
             }
 
             // Neighbor check
-            short value = m_grid[y][x];
+            int value = m_grid[y][x];
 
-            short north = get(x, y - 1);
+            int north = get(x, y - 1);
             if(value == north)
             {
                 return true;
             }
 
-            short south = get(x, y + 1);
+            int south = get(x, y + 1);
             if(value == south)
             {
                 return true;
             }
 
-            short east = get(x - 1, y);
+            int east = get(x - 1, y);
             if(value == east)
             {
                 return true;
             }
 
-            short west = get(x + 1, y);
+            int west = get(x + 1, y);
             if(value == west)
             {
                 return true;
@@ -134,9 +134,9 @@ bool grid::can_move() const
 // Returns true if there is an empty slots anywhere
 int grid::has_empty() const
 {
-    for(short x = 0; x < grid_size; ++x)
+    for(int x = 0; x < grid_size; ++x)
     {
-        for(short y = 0; y < grid_size; ++y)
+        for(int y = 0; y < grid_size; ++y)
         {
             if(m_grid[y][x] == 0)
             {
@@ -149,7 +149,7 @@ int grid::has_empty() const
 }
 
 // Get the value from x,y
-inline short grid::get(const short& x, const short& y) const
+inline int grid::get(const int& x, const int& y) const
 {
     if(is_outside(x, y))
     {
@@ -163,9 +163,9 @@ inline short grid::get(const short& x, const short& y) const
 int grid::score() const
 {
     int total = 0;
-    for(short x = 0; x < grid_size; ++x)
+    for(int x = 0; x < grid_size; ++x)
     {
-        for(short y = 0; y < grid_size; ++y)
+        for(int y = 0; y < grid_size; ++y)
         {
             total += m_grid[y][x];
         }
@@ -175,14 +175,14 @@ int grid::score() const
 }
 
 // Find the largest
-short grid::largest() const
+int grid::largest() const
 {
-    short num = 0;
-    for(short x = 0; x < grid_size; ++x)
+    int num = 0;
+    for(int x = 0; x < grid_size; ++x)
     {
-        for(short y = 0; y < grid_size; ++y)
+        for(int y = 0; y < grid_size; ++y)
         {
-            short value = m_grid[y][x];
+            int value = m_grid[y][x];
             if(value > num)
             {
                 num = value;
@@ -193,22 +193,22 @@ short grid::largest() const
     return num;
 }
 
-std::vector<short> grid::actions() const
+std::vector<int> grid::actions() const
 {
     return m_actions;
 }
 
 // Moves the tiles in the direction
 // TODO: Refactor, works for now
-bool grid::move(short dir)
+bool grid::move(int dir)
 {
     bool movement = false;
 
     if(dir == SOUTH)
     {
-        for(short x = 0; x < grid_size; ++x)
+        for(int x = 0; x < grid_size; ++x)
         {
-            for(short y = grid_size - 1; y >= 0; --y)
+            for(int y = grid_size - 1; y >= 0; --y)
             {
                 // Empty slots dont move
                 if(m_grid[y][x] == 0)
@@ -216,8 +216,8 @@ bool grid::move(short dir)
                     continue;
                 }
 
-                short newY = y;
-                short nextY = y + 1;
+                int newY = y;
+                int nextY = y + 1;
 
                 while(m_grid[nextY][x] == 0 && !is_outside(x, nextY))
                 {
@@ -231,7 +231,7 @@ bool grid::move(short dir)
                     movement = true;
                 }
 
-                short value = m_grid[y][x];
+                int value = m_grid[y][x];
 
                 m_grid[y][x] = 0;
                 m_grid[newY][x] = value;
@@ -240,9 +240,9 @@ bool grid::move(short dir)
     }
     if(dir == NORTH)
     {
-        for(short x = 0; x < grid_size; ++x)
+        for(int x = 0; x < grid_size; ++x)
         {
-            for(short y = 0; y < grid_size; ++y)
+            for(int y = 0; y < grid_size; ++y)
             {
                 // Empty slots dont move
                 if(m_grid[y][x] == 0)
@@ -250,8 +250,8 @@ bool grid::move(short dir)
                     continue;
                 }
 
-                short newY = y;
-                short nextY = y - 1;
+                int newY = y;
+                int nextY = y - 1;
 
                 while(m_grid[nextY][x] == 0 && !is_outside(x, nextY))
                 {
@@ -265,7 +265,7 @@ bool grid::move(short dir)
                     movement = true;
                 }
 
-                short value = m_grid[y][x];
+                int value = m_grid[y][x];
 
                 m_grid[y][x] = 0;
                 m_grid[newY][x] = value;
@@ -274,9 +274,9 @@ bool grid::move(short dir)
     }
     if(dir == WEST)
     {
-        for(short x = 0; x < grid_size; ++x)
+        for(int x = 0; x < grid_size; ++x)
         {
-            for(short y = 0; y < grid_size; ++y)
+            for(int y = 0; y < grid_size; ++y)
             {
                 // Empty slots dont move
                 if(m_grid[y][x] == 0)
@@ -284,8 +284,8 @@ bool grid::move(short dir)
                     continue;
                 }
 
-                short newX = x;
-                short nextX = x - 1;
+                int newX = x;
+                int nextX = x - 1;
 
                 while(m_grid[y][nextX] == 0 && !is_outside(nextX, y))
                 {
@@ -299,7 +299,7 @@ bool grid::move(short dir)
                     movement = true;
                 }
 
-                short value = m_grid[y][x];
+                int value = m_grid[y][x];
 
                 m_grid[y][x] = 0;
                 m_grid[y][newX] = value;
@@ -308,9 +308,9 @@ bool grid::move(short dir)
     }
     if(dir == EAST)
     {
-        for(short x = grid_size - 1; x >= 0; --x)
+        for(int x = grid_size - 1; x >= 0; --x)
         {
-            for(short y = 0; y < grid_size; ++y)
+            for(int y = 0; y < grid_size; ++y)
             {
                 // Empty slots dont move
                 if(m_grid[y][x] == 0)
@@ -318,8 +318,8 @@ bool grid::move(short dir)
                     continue;
                 }
 
-                short newX = x;
-                short nextX = x + 1;
+                int newX = x;
+                int nextX = x + 1;
 
                 while(m_grid[y][nextX] == 0 && !is_outside(nextX, y))
                 {
@@ -333,7 +333,7 @@ bool grid::move(short dir)
                     movement = true;
                 }
 
-                short value = m_grid[y][x];
+                int value = m_grid[y][x];
 
                 m_grid[y][x] = 0;
                 m_grid[y][newX] = value;
@@ -345,15 +345,15 @@ bool grid::move(short dir)
 }
 
 // Goes through and merges in that direction
-bool grid::merge(short dir)
+bool grid::merge(int dir)
 {
     bool merging = false;
 
     if(dir == SOUTH)
     {
-        for(short x = 0; x < grid_size; ++x)
+        for(int x = 0; x < grid_size; ++x)
         {
-            for(short y = grid_size - 1; y >= 0; --y)
+            for(int y = grid_size - 1; y >= 0; --y)
             {
                 // Empty slots dont merge
                 if(m_grid[y][x] == 0)
@@ -361,9 +361,9 @@ bool grid::merge(short dir)
                     continue;
                 }
 
-                short nextY = y + 1;
-                short value = m_grid[y][x];
-                short merge_value = get(x, nextY);
+                int nextY = y + 1;
+                int value = m_grid[y][x];
+                int merge_value = get(x, nextY);
 
                 if(value == merge_value)
                 {
@@ -379,9 +379,9 @@ bool grid::merge(short dir)
     }
     if(dir == NORTH)
     {
-        for(short x = 0; x < grid_size; ++x)
+        for(int x = 0; x < grid_size; ++x)
         {
-            for(short y = 0; y < grid_size; ++y)
+            for(int y = 0; y < grid_size; ++y)
             {
                 // Empty slots dont merge
                 if(m_grid[y][x] == 0)
@@ -389,9 +389,9 @@ bool grid::merge(short dir)
                     continue;
                 }
 
-                short nextY = y - 1;
-                short value = m_grid[y][x];
-                short merge_value = get(x, nextY);
+                int nextY = y - 1;
+                int value = m_grid[y][x];
+                int merge_value = get(x, nextY);
 
                 if(value == merge_value)
                 {
@@ -407,9 +407,9 @@ bool grid::merge(short dir)
     }
     if(dir == WEST)
     {
-        for(short x = 0; x < grid_size; ++x)
+        for(int x = 0; x < grid_size; ++x)
         {
-            for(short y = 0; y < grid_size; ++y)
+            for(int y = 0; y < grid_size; ++y)
             {
                 // Empty slots dont merge
                 if(m_grid[y][x] == 0)
@@ -417,9 +417,9 @@ bool grid::merge(short dir)
                     continue;
                 }
 
-                short nextX = x - 1;
-                short value = m_grid[y][x];
-                short merge_value = get(nextX, y);
+                int nextX = x - 1;
+                int value = m_grid[y][x];
+                int merge_value = get(nextX, y);
 
                 if(value == merge_value)
                 {
@@ -435,9 +435,9 @@ bool grid::merge(short dir)
     }
     if(dir == EAST)
     {
-        for(short x = grid_size - 1; x >= 0; --x)
+        for(int x = grid_size - 1; x >= 0; --x)
         {
-            for(short y = 0; y < grid_size; ++y)
+            for(int y = 0; y < grid_size; ++y)
             {
                 // Empty slots dont merge
                 if(m_grid[y][x] == 0)
@@ -445,9 +445,9 @@ bool grid::merge(short dir)
                     continue;
                 }
 
-                short nextX = x + 1;
-                short value = m_grid[y][x];
-                short merge_value = get(nextX, y);
+                int nextX = x + 1;
+                int value = m_grid[y][x];
+                int merge_value = get(nextX, y);
 
                 if(value == merge_value)
                 {
@@ -466,7 +466,7 @@ bool grid::merge(short dir)
 }
 
 // Sets the x and y with a random empty position
-void grid::random_empty_pos(short& x, short& y)
+void grid::random_empty_pos(int& x, int& y)
 {
     if(!has_empty())
     {

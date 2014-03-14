@@ -8,12 +8,12 @@ std::mt19937& rand_gen()
     return gen;
 }
 
-short rand_pos()
+int rand_pos()
 {
-    return static_cast<short>(rand_gen()() % grid_size);
+    return static_cast<int>(rand_gen()() % grid_size);
 }
 
-short rand_action()
+int rand_action()
 {
-    return static_cast<short>(rand_gen()() % action_count);
+    return static_cast<int>(rand_gen()() % action_count);
 }
