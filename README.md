@@ -35,6 +35,8 @@ std::cout << g.largest() << std::endl;
 std::vector<short> a = g.actions();
 ```
 
+You can increase the size of the grid and change a few other parameters in the utils.hpp file
+
 It also contains a Genetic Algorithm structure to try to solve the game but it is in very early stages.
 
 If you want to try some methods yourself, please check it out, the class "grid" has all the interfaces for you to use to play the game.
