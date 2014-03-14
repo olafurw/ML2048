@@ -10,10 +10,14 @@ std::mt19937& rand_gen()
 
 int rand_pos()
 {
-    return static_cast<int>(rand_gen()() % grid_size);
+    static std::uniform_int_distribution<> dis(0, grid_size - 1);
+
+    return dis(rand_gen());
 }
 
 direction rand_action()
 {
-    return static_cast<direction>(rand_gen()() % action_count);
+    static std::uniform_int_distribution<> dis(0, action_count - 1);
+
+    return static_cast<direction>(dis(rand_gen()));
 }
