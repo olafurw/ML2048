@@ -132,7 +132,7 @@ bool grid::can_move() const
 }
 
 // Returns true if there is an empty slots anywhere
-int grid::has_empty() const
+bool grid::has_empty() const
 {
     for(int x = 0; x < grid_size; ++x)
     {

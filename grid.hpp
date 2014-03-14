@@ -36,7 +36,7 @@ public:
     bool can_move() const;
 
     // Returns true if there is an empty slots anywhere
-    int has_empty() const;
+    bool has_empty() const;
 
     // Get the value from x,y
     inline int get(const int& x, const int& y) const;
