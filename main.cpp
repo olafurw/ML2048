@@ -113,7 +113,7 @@ void sort_population(std::vector<grid>& population)
 
 void sort_population_random(std::vector<grid>& population)
 {
-    std::random_shuffle(population.begin(), population.end());
+    std::shuffle(population.begin(), population.end(), rand_gen());
 }
 
 int main()
