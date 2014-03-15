@@ -32,6 +32,8 @@ direction get_action()
 
 int main()
 {
+    std::cout << "w = north, s = south, a = west, d = east" << std::endl;
+
     grid g;
 
     g.print();
