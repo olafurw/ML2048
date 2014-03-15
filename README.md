@@ -14,12 +14,7 @@ grid g;
 // While there are moves to be made
 while(g.can_move())
 {
-    // An action is just a short
-    // 0 = NORTH
-    // 1 = SOUTH
-    // 2 = EAST
-    // 3 = WEST
-    g.action(0);
+    g.action(direction::NORTH);
 }
 
 // Prints the board
