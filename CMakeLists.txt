@@ -6,6 +6,11 @@ set(CMAKE_C_COMPILER "gcc")
 set(CMAKE_CXX_COMPILER "g++")
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS} -g")
 
-add_executable(ml2048 utils.cpp grid.cpp main.cpp)
+add_executable(game game.cpp)
+add_executable(speed speed.cpp)
+add_executable(ga ga.cpp)
+add_library(grid utils.cpp grid.cpp)
 
-target_link_libraries(ml2048)
+target_link_libraries(game grid)
+target_link_libraries(speed grid)
+target_link_libraries(ga grid)
