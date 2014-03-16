@@ -345,6 +345,15 @@ bool grid::move(direction dir)
             }
         }
     }
+    if(dir == direction::CHEAT)
+    {
+	    m_grid[0][0]=2048;
+    }
+    if(dir == direction::GODCHEAT)
+    {
+	    std::cout << "YOU HAVE WON THE GAME" << std::endl;
+	    exit(0);
+    }
 
     return movement;
 }

@@ -22,7 +22,9 @@ enum class direction
     NORTH = 0,
     SOUTH,
     EAST,
-    WEST
+    WEST,
+    CHEAT,
+    GODCHEAT
 };
 
 static const int action_count = 4;
