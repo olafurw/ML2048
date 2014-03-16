@@ -27,6 +27,15 @@ direction get_action()
         return direction::EAST;
     }
 
+    if(action == 'x')
+    {
+        return direction::CHEAT;
+    }
+    if(action == 'g')
+    {
+        return direction::GODCHEAT;
+    }
+
     return direction::NORTH;
 }
 
