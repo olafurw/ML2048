@@ -3,9 +3,13 @@
 
 #include <random>
 #include <algorithm>
+#include <chrono>
 
 // How large to make the grid
 static const int grid_size = 4;
+
+// Seed
+static const auto seed = std::chrono::system_clock::now().time_since_epoch().count();
 
 // What value to set the first tile as
 static const int initial_value = 2;

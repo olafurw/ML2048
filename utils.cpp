@@ -1,10 +1,8 @@
 #include "utils.hpp"
 
-#include <chrono>
-
 std::mt19937& rand_gen()
 {
-    static std::mt19937 gen(std::chrono::system_clock::now().time_since_epoch().count());
+    static std::mt19937 gen(seed);
     return gen;
 }
 
