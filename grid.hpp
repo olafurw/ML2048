@@ -37,6 +37,9 @@ public:
 
     // Get the value from x,y
     inline int get(const int& x, const int& y) const;
+    
+    // Set a value to x,y
+    void set(const int& x, const int& y, const int value);
 
     // Sum the score
     int score() const;

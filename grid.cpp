@@ -159,6 +159,17 @@ inline int grid::get(const int& x, const int& y) const
     return m_grid[y][x];
 }
 
+// Get the value from x,y
+void grid::set(const int& x, const int& y, const int value)
+{
+    if(is_outside(x, y))
+    {
+        return;
+    }
+
+    m_grid[y][x] = value;
+}
+
 // Sum the score
 int grid::score() const
 {

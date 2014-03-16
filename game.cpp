@@ -2,32 +2,44 @@
 
 #include "grid.hpp"
 
-direction get_action()
+void do_action(grid& g)
 {
     char action;
     std::cin >> action;
 
     if(action == 'w')
     {
-        return direction::NORTH;
+        g.action(direction::NORTH);
+
+        return;
     }
 
     if(action == 's')
     {
-        return direction::SOUTH;
+        g.action(direction::SOUTH);
+
+        return;
     }
 
     if(action == 'a')
     {
-        return direction::WEST;
+        g.action(direction::WEST);
+
+        return;
     }
 
     if(action == 'd')
     {
-        return direction::EAST;
+        g.action(direction::EAST);
+
+        return;
     }
 
-    return direction::NORTH;
+    if(action == 'g')
+    {
+        std::cout << "Cheater!" << std::endl;
+        g.set(0, 0, 2048);        
+    }
 }
 
 int main()
@@ -40,9 +52,15 @@ int main()
 
     while(g.can_move())
     {
-        g.action(get_action());
+        do_action(g);
         g.print();
         std::cout << "Score: " << g.score() << std::endl;
+
+        if(g.largest() == 2048)
+        {
+            std::cout << "Win" << std::endl;
+            break;
+        }
     }
 
     return 0;
