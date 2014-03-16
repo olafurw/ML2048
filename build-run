@@ -1,6 +1,0 @@
-mkdir -p build;
-pushd build;
-cmake ..;
-make;
-./ml2048;
-popd;
