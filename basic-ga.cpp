@@ -169,7 +169,7 @@ int main()
 
     population.at(0).print();
 
-    for(auto& p : population)
+    for(auto const& p : population)
     {
         std::cout << p.score() << std::endl;
     }
