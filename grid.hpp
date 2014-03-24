@@ -27,7 +27,7 @@ public:
     void print();
 
     // An action is a move, merge and then move the merged pieces and then add an new piece
-    void action(direction dir);
+    bool action(direction dir);
 
     // Returns true if there is an available move
     bool can_move() const;

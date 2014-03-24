@@ -70,7 +70,7 @@ inline bool grid::is_outside(const int x, const int y) const
 }
 
 // An action is a move, merge and then move the merged pieces and then add an new piece
-void grid::action(direction dir)
+bool grid::action(direction dir)
 {
     bool a = move(dir);
     bool b = merge(dir);
@@ -82,6 +82,8 @@ void grid::action(direction dir)
     }
 
     m_actions.push_back(dir);
+
+    return a || b || c;
 }
 
 // Returns true if there is an available move
