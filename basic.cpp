@@ -5,32 +5,36 @@
 int main()
 {
     int largest = 0;
+    int count = 0;
 
     while(true)
     {
         grid g;
         while(g.can_move())
         {
-            bool north = g.action(direction::NORTH);
             bool east = g.action(direction::EAST);
+            bool south = g.action(direction::SOUTH);
+            bool west = g.action(direction::WEST);
+            bool south2 = g.action(direction::SOUTH);
 
-            if(!north && !east)
+            if(!east && !south && !west && !south2)
             {
-                bool south = g.action(direction::SOUTH);
-                east = g.action(direction::EAST);
-                north = g.action(direction::NORTH);
-
-                if(!south && !east && !north)
+                if(g.largest() > largest)
                 {
-                    if(g.largest() > largest)
-                    {
-                        largest = g.largest();
-                        std::cout << largest << std::endl;
-                    }
-
-                    break;
+                    largest = g.largest();
+                    std::cout << largest << std::endl;
+                    g.print();
                 }
+
+                break;
             }
+        }
+
+        ++count;
+
+        if(count % 1000 == 0)
+        {
+            std::cout << "game: " << count << std::endl;
         }
     }
 
