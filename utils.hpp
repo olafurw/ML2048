@@ -6,7 +6,7 @@
 #include <chrono>
 
 // How large to make the grid
-static const int grid_size = 4;
+static const int grid_size = 5;
 
 // Seed
 static const auto seed = std::chrono::system_clock::now().time_since_epoch().count();
