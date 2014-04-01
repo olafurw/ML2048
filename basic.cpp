@@ -13,21 +13,26 @@ int main()
         while(g.can_move())
         {
             bool east = g.action(direction::EAST);
+            east |= g.action(direction::EAST);
+            east |= g.action(direction::EAST);
+
             bool south = g.action(direction::SOUTH);
+
             bool west = g.action(direction::WEST);
-            bool south2 = g.action(direction::SOUTH);
+            west |= g.action(direction::WEST);
+            west |= g.action(direction::WEST);
 
-            if(!east && !south && !west && !south2)
+            if(!east && !south && !west)
             {
-                if(g.largest() > largest)
-                {
-                    largest = g.largest();
-                    std::cout << largest << std::endl;
-                    g.print();
-                }
-
-                break;
+                g.action(direction::NORTH);
             }
+        }
+
+        if(g.largest() > largest)
+        {
+            largest = g.largest();
+            std::cout << largest << std::endl;
+            g.print();
         }
 
         ++count;
