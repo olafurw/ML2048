@@ -17,6 +17,9 @@ static const int initial_value = 2;
 // How many tiles should have values at the start
 static const int initial_slot_count = 2;
 
+// The % that an initial value will be double
+static const int initial_double_value_percent = 10;
+
 // How many empty slots get a value after every turn
 static const int round_slot_count = 1;
 
@@ -36,6 +39,9 @@ std::mt19937& rand_gen();
 
 // Gives a random position from [0, grid_size)
 int rand_pos();
+
+// Returns true if you should double the initial value
+bool double_initial_value();
 
 // Gives a random action from [0, action_count)
 direction rand_action();

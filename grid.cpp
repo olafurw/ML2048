@@ -37,7 +37,9 @@ void grid::init(int count)
             return;
         }
 
-        m_grid[y][x] = initial_value;
+        bool dbl = double_initial_value();
+
+        m_grid[y][x] = (dbl ? (initial_value * initial_value) : initial_value);
     }
 }
 

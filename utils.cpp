@@ -13,6 +13,13 @@ int rand_pos()
     return dis(rand_gen());
 }
 
+bool double_initial_value()
+{
+    static std::uniform_int_distribution<> dis(0, 99);
+
+    return dis(rand_gen()) < initial_double_value_percent;
+}
+
 direction rand_action()
 {
     static std::uniform_int_distribution<> dis(0, action_count - 1);
