@@ -42,7 +42,7 @@ public:
     void set(const int& x, const int& y, const int value);
 
     // Sum the score
-    int score() const;
+    unsigned int score() const;
 
     // Find the largest
     int largest() const;
@@ -73,6 +73,8 @@ private:
     int m_grid[grid_size][grid_size];
 
     std::vector<direction> m_actions;
+
+    unsigned int m_score;
 };
 
 #endif

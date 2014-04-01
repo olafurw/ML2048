@@ -6,6 +6,8 @@
 // Clear the board and add 2 numbers
 grid::grid()
 {
+    m_score = 0;
+
     reset();
     init(initial_slot_count);
 }
@@ -175,18 +177,9 @@ void grid::set(const int& x, const int& y, const int value)
 }
 
 // Sum the score
-int grid::score() const
+unsigned int grid::score() const
 {
-    int total = 0;
-    for(int x = 0; x < grid_size; ++x)
-    {
-        for(int y = 0; y < grid_size; ++y)
-        {
-            total += m_grid[y][x];
-        }
-    }
-
-    return total;
+    return m_score;
 }
 
 // Find the largest
@@ -387,10 +380,14 @@ bool grid::merge(direction dir)
 
                 if(value == merge_value)
                 {
+                    int new_value = value + value;
+
                     m_grid[y][x] = 0;
-                    m_grid[nextY][x] = value + value;
+                    m_grid[nextY][x] = new_value;
 
                     merging = true;
+
+                    m_score += new_value;
                 }
             }
         }
@@ -415,10 +412,14 @@ bool grid::merge(direction dir)
 
                 if(value == merge_value)
                 {
+                    int new_value = value + value;
+
                     m_grid[y][x] = 0;
-                    m_grid[nextY][x] = value + value;
+                    m_grid[nextY][x] = new_value;
 
                     merging = true;
+
+                    m_score += new_value;
                 }
             }
         }
@@ -443,10 +444,14 @@ bool grid::merge(direction dir)
 
                 if(value == merge_value)
                 {
+                    int new_value = value + value;
+
                     m_grid[y][x] = 0;
-                    m_grid[y][nextX] = value + value;
+                    m_grid[y][nextX] = new_value;
 
                     merging = true;
+
+                    m_score += new_value;
                 }
             }
         }
@@ -471,10 +476,14 @@ bool grid::merge(direction dir)
 
                 if(value == merge_value)
                 {
+                    int new_value = value + value;
+
                     m_grid[y][x] = 0;
-                    m_grid[y][nextX] = value + value;
+                    m_grid[y][nextX] = new_value;
 
                     merging = true;
+
+                    m_score += new_value;
                 }
             }
         }
